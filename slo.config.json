@@ -1,0 +1,43 @@
+{
+  "project": {
+    "name": "food_map_ntu_v1",
+    "title": "校園美食地圖 NTU v1",
+    "problem": "台大學生在公館／校本部步行圈內覓食時，難以依評價、距離、預算與營業狀態快速找店（Fork 自宜大 food_map_niu_v2）。",
+    "python": "3.10"
+  },
+  "kpi": {
+    "p95_latency_ms": 120.0,
+    "timeout_rate": 0.002,
+    "cost_per_request": 0.2,
+    "quality_drop_ratio": 0.05,
+    "error_rate": 0.01
+  },
+  "gate": {
+    "use_absolute_kpi": true,
+    "require_relative_improvement": true,
+    "p95_latency_ratio_max": 0.75,
+    "cost_ratio_max": 0.7
+  },
+  "benchmark": {
+    "baseline": {
+      "profile": "baseline",
+      "p95_latency_ms": 180.0,
+      "timeout_rate": 0.005,
+      "cost_per_request": 0.3,
+      "quality_drop_ratio": 0.0,
+      "error_rate": 0.02
+    },
+    "optimized": {
+      "profile": "optimized",
+      "p95_latency_ms": 110.0,
+      "timeout_rate": 0.001,
+      "cost_per_request": 0.18,
+      "quality_drop_ratio": 0.03,
+      "error_rate": 0.005
+    }
+  },
+  "ci": {
+    "cov_fail_under": 70,
+    "python_version": "3.10"
+  }
+}

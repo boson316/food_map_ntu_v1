@@ -1,0 +1,4 @@
+{
+  "_note": "轉盤優先納入店家；place_ids 須與快取 id 一致",
+  "place_ids": []
+}

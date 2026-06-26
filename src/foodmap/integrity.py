@@ -1,0 +1,50 @@
+"""Core module integrity checks and author metadata."""
+
+from __future__ import annotations
+
+import hashlib
+from pathlib import Path
+
+AUTHOR = "Boson Huang"
+COPYRIGHT = "Copyright (c) 2026 Boson Huang. All rights reserved."
+
+
+class CoreIntegrityError(RuntimeError):
+    """Raised when a protected core module fails integrity verification."""
+
+
+_CORE_FILES: tuple[tuple[str, str], ...] = (
+    ("scoring.py", "f780d1a853c626bcf33e310c62c315b2a34e5b0c4c690049e9182d9d5c9502c1"),
+    ("service.py", "7946e366356fceca2647db33c34b00dd67817e180bed38ee84cf2b2d316c9ae3"),
+    ("wheel.py", "2089f357535fc683f61504eda9d77701ecb6f4dd8ab7dd46a2bc70f0979fa408"),
+)
+
+
+def _module_path(filename: str) -> Path:
+    path = Path(__file__).resolve().parent / filename
+    if not path.is_file():
+        raise CoreIntegrityError(f"找不到核心模組：{filename}")
+    return path
+
+
+def _sha256(path: Path) -> str:
+    # Git checkout on Linux uses LF; Windows working copies may use CRLF.
+    normalized = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(normalized).hexdigest()
+
+
+def verify_core_modules() -> None:
+    """Fail fast if protected algorithm files were modified."""
+    for filename, expected in _CORE_FILES:
+        path = _module_path(filename)
+        actual = _sha256(path)
+        if actual != expected:
+            raise CoreIntegrityError(
+                f"核心模組 {filename} 完整性驗證失敗（可能被竄改）。"
+                f" expected={expected[:12]}… actual={actual[:12]}…"
+                " 請執行 python scripts/sync_integrity_hashes.py 後重新部署。"
+            )
+
+
+def author_notice() -> str:
+    return f"© 2026 {AUTHOR} · 核心演算法受著作權保護 · 禁止未授權複製或修改"

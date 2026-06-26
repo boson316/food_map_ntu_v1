@@ -1,0 +1,22 @@
+.env
+.env.*
+data/places_cache.json
+__pycache__/
+.pytest_cache/
+.coverage
+*.pyc
+
+# Internal / workspace-only (public repo hygiene)
+AGENTS.md
+AI_HANDOFF.md
+TASKS.md
+KPI.md
+BENCHMARK.md
+CI_GATES.md
+prompt-patterns.md
+筆記.txt
+next_actions.md
+weekly_review.md
+risk_register.md
+artifacts/
+.cursor/

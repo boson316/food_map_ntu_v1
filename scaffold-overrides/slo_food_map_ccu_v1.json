@@ -1,0 +1,8 @@
+{
+  "project": {
+    "name": "food_map_ccu_v1",
+    "title": "校園美食地圖 CCU v1",
+    "problem": "中正大學生在民雄校本部周邊覓食時，難以在可接受距離內依評價、距離、預算與營業狀態快速找店（Fork 自宜大 food_map_niu_v2）。",
+    "python": "3.10"
+  }
+}

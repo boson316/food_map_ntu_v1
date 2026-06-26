@@ -1,0 +1,8 @@
+{
+  "project": {
+    "name": "food_map_ntu_v1",
+    "title": "校園美食地圖 NTU v1",
+    "problem": "台大學生在公館／校本部步行圈內覓食時，難以依評價、距離、預算與營業狀態快速找店（Fork 自宜大 food_map_niu_v2）。",
+    "python": "3.10"
+  }
+}
