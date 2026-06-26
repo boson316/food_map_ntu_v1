@@ -2,7 +2,7 @@
 
 **Languages:** [English](README.md) · [中文](README.zh-TW.md)
 
-> **狀態：** Phase 1 已完成 · **雲端（規劃）：** https://food-map-ntu-v1.streamlit.app  
+> **狀態：** 已上線 · **Demo：** https://food-ntu-v1.streamlit.app/  
 > **Repo：** https://github.com/boson316/food_map_ntu_v1 · **Fork 自：** [food_map_niu_v2](https://github.com/boson316/food_map_niu_v2)
 
 **作者：** Boson Huang · **授權：** 專有軟體 — 見 [LICENSE](LICENSE)

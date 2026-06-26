@@ -2,7 +2,7 @@
 
 **Languages:** [English](README.md) · [中文](README.zh-TW.md)
 
-> **Status:** Phase 1 implemented · **Demo (planned):** https://food-map-ntu-v1.streamlit.app  
+> **Status:** Live · **Demo:** https://food-ntu-v1.streamlit.app/  
 > **Repo:** https://github.com/boson316/food_map_ntu_v1 · **Fork from:** [food_map_niu_v2](https://github.com/boson316/food_map_niu_v2)
 
 **Author:** Boson Huang · **License:** Proprietary — see [LICENSE](LICENSE)
