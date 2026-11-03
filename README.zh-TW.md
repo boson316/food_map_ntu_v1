@@ -32,6 +32,15 @@
 
 ---
 
+## 靜態網站版（GitHub Pages，免冷啟動）
+
+Streamlit Community Cloud 免費方案閒置後會休眠。`web/` 是同功能的**純靜態** Leaflet 版本：篩選、距離、綜合分數、營業狀態、轉盤全部在瀏覽器計算，沒有伺服器，打開即用、不會休眠。前端與其他校區共用，學校設定只在 `scripts/export_static.py` 的 `SCHOOL`。
+
+- 網址（啟用後）：https://boson316.github.io/food_map_ntu_v1/
+- 資料：`python scripts/export_static.py` 產生 `web/data/places.json` 與 `web/data/config.json`。
+- 部署：push 到 `main` 後 `.github/workflows/pages.yml` 自動重新匯出並部署。**首次需在 Settings → Pages → Source 選「GitHub Actions」。**
+- 本機預覽：`python scripts/export_static.py && python -m http.server -d web 8000`
+
 ## 安裝與測試
 
 ```powershell
