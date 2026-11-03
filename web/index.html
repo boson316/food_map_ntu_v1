@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>校園美食地圖</title>
+  <meta name="description" content="校園周邊美食地圖：依評價與距離排序、分類篩選、轉盤抽午餐。純靜態網站，秒開不用等。">
+  <meta name="theme-color" content="#1a73e8">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%9C%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-text">
+      <h1 id="site-title">校園美食地圖</h1>
+      <p class="muted" id="site-subtitle">載入中…</p>
+    </div>
+    <button type="button" class="btn btn-ghost filter-toggle" id="filter-toggle" aria-controls="filters" aria-expanded="false">
+      ☰ 篩選
+    </button>
+  </header>
+
+  <div class="layout">
+    <aside class="filters" id="filters" aria-label="篩選條件">
+      <div class="filters-head">
+        <h2>條件</h2>
+        <button type="button" class="btn btn-ghost filters-close" id="filters-close" aria-label="關閉篩選">✕</button>
+      </div>
+
+      <label class="field">
+        <span>搜尋店名</span>
+        <input type="search" id="f-search" placeholder="例：拉麵、咖啡、炸雞" autocomplete="off">
+      </label>
+
+      <details class="box">
+        <summary>中心點（預設校本部）</summary>
+        <p class="hint">也可以直接拖曳地圖上的 🔵 藍點。</p>
+        <div class="row">
+          <input type="text" id="f-place" placeholder="輸入地名，例：宜蘭火車站">
+          <button type="button" class="btn" id="btn-geocode">查詢</button>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-ghost" id="btn-locate">📍 用我的位置</button>
+          <button type="button" class="btn btn-ghost" id="btn-reset-center">回到校本部</button>
+        </div>
+        <p class="hint" id="center-status"></p>
+        <div class="row two">
+          <label class="field"><span>緯度</span><input type="number" step="0.000001" id="f-lat"></label>
+          <label class="field"><span>經度</span><input type="number" step="0.000001" id="f-lon"></label>
+        </div>
+      </details>
+
+      <label class="field">
+        <span>搜尋半徑 <output id="o-radius"></output> 公里</span>
+        <input type="range" id="f-radius" min="0.3" max="5" step="0.1">
+      </label>
+
+      <label class="field">
+        <span>最少評論數</span>
+        <input type="number" id="f-min-reviews" min="0" step="1" value="0">
+      </label>
+
+      <details class="box" open>
+        <summary>美食分類</summary>
+        <p class="hint">未選任何項 = 顯示全部；轉盤有選時自動併入「其他」。</p>
+        <div id="group-chips"></div>
+        <label class="check"><input type="checkbox" id="f-other"> 篩選「其他」分類</label>
+        <button type="button" class="btn btn-ghost btn-small" id="btn-clear-groups">清除分類</button>
+      </details>
+
+      <label class="check"><input type="checkbox" id="f-budget"> 預算：平價 ≈100 元</label>
+      <div class="field budget-only" hidden>
+        <span>人均上限（新台幣）</span>
+        <input type="number" id="f-max-spend" min="50" max="500" step="10" value="100">
+      </div>
+      <label class="check budget-only" hidden><input type="checkbox" id="f-unknown-price" checked> 預算篩選時含未標價位</label>
+
+      <label class="check"><input type="checkbox" id="f-open-only"> 只看現在營業中</label>
+
+      <label class="field">
+        <span>排序方式</span>
+        <select id="f-sort">
+          <option value="composite">綜合（推薦）</option>
+          <option value="huang">黃氏星等（高到低）</option>
+          <option value="rating">貝氏星等（高到低）</option>
+          <option value="distance">距離（近到遠）</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>最多顯示 <output id="o-limit"></output> 筆</span>
+        <input type="range" id="f-limit" min="5" max="300" step="5" value="300">
+      </label>
+
+      <button type="button" class="btn btn-primary filters-done" id="filters-done">看結果</button>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <main class="content">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" class="tab" id="tab-map" aria-selected="true" aria-controls="panel-map">🗺️ 美食地圖</button>
+        <button type="button" role="tab" class="tab" id="tab-wheel" aria-selected="false" aria-controls="panel-wheel">🎡 轉盤選擇</button>
+        <button type="button" role="tab" class="tab" id="tab-guide" aria-selected="false" aria-controls="panel-guide">ℹ️ 分數說明</button>
+      </div>
+
+      <p class="result-count" id="result-count" aria-live="polite"></p>
+
+      <section class="panel" id="panel-map" role="tabpanel" aria-labelledby="tab-map">
+        <div class="map-grid">
+          <div class="map-col">
+            <div id="map" aria-label="餐廳地圖"></div>
+            <p class="legend muted">🔵 中心點（可拖曳）· 🔴 餐廳 · 🟡 你選的店</p>
+            <div id="focus-card"></div>
+          </div>
+          <div class="list-col">
+            <div class="table-wrap">
+              <table class="rtable" id="rtable">
+                <thead>
+                  <tr>
+                    <th data-sort="name">店名</th>
+                    <th data-sort="distance" class="num">距離</th>
+                    <th data-sort="open">營業</th>
+                    <th data-sort="rating" class="num">評分</th>
+                    <th data-sort="reviews" class="num">評論數</th>
+                    <th>平均消費</th>
+                    <th>美食分類</th>
+                    <th data-sort="huang" class="num">黃氏</th>
+                    <th data-sort="composite" class="num">綜合</th>
+                    <th>地圖</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="empty" id="empty" hidden>沒有符合條件的餐廳，請放寬半徑或減少最少評論數。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-wheel" role="tabpanel" aria-labelledby="tab-wheel" hidden>
+        <div class="wheel-app">
+          <div class="wheel-head">
+            <h3>今天吃什麼？轉一下就知道</h3>
+            <p class="muted" id="wheel-caption"></p>
+          </div>
+          <div class="wheel-actions">
+            <button class="btn btn-primary btn-big" id="wheel-spin" type="button">開始轉盤</button>
+            <button class="btn btn-ghost btn-big" id="wheel-reset" type="button">重置</button>
+          </div>
+          <div class="wheel-stage" aria-label="餐廳轉盤">
+            <div class="wheel-pointer" aria-hidden="true"></div>
+            <div class="wheel-disc">
+              <svg viewBox="0 0 400 400" role="img" aria-label="餐廳轉盤盤面">
+                <g id="wheel-rotor"></g>
+                <circle class="wheel-hub" cx="200" cy="200" r="34"></circle>
+              </svg>
+            </div>
+          </div>
+          <div class="wheel-result" id="wheel-result" aria-live="polite"></div>
+          <div class="wheel-legend"><ul id="wheel-legend"></ul></div>
+        </div>
+      </section>
+
+      <section class="panel guide" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+        <h3>綜合分數</h3>
+        <p><strong>預設排序依據</strong> — 兩段相乘：</p>
+        <pre>綜合分數 = 黃氏星等 × exp(-距離_km / 0.6)</pre>
+        <p><strong>黃氏星等</strong>（Reputation）：</p>
+        <pre>huang = rating × 分級係數 × (0.5 + 0.5×rating/5) × (0.4 + 0.6×log1p(評論數)/log1p(500))</pre>
+        <ul>
+          <li>星越高、評論越多 → 黃氏越高（500 則評論飽和）</li>
+          <li>距離衰減 decay_km = 0.6：369 m → exp(-0.369/0.6) ≈ 0.54</li>
+          <li>同樣高星，<strong>近 + 評論多</strong>的店會排前面。</li>
+        </ul>
+        <h4>其他指標</h4>
+        <p><strong>貝氏星等</strong> — 把 Google 評分與評論數一起算「較可信」平均；評論越少，極端分數越往整體平均拉。</p>
+        <p><strong>星等分級</strong> — 依 Google 評分分三檔，作為黃氏公式的係數：低（&lt;2.5，×0.65）、普通（2.5～4.0，×1.0）、高（≥4.0，×1.25）。</p>
+        <p class="muted">營業狀態依 Google 營業時間以台北時間即時判斷；「未知」代表沒有營業時間資料。</p>
+      </section>
+
+      <footer class="footer muted">
+        <span id="author"></span> · <span id="visits">累計瀏覽 … 人次</span>
+        <span id="repo-link"></span>
+      </footer>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

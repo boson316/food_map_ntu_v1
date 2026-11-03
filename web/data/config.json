@@ -1,0 +1,70 @@
+{
+  "school": "台大",
+  "title": "國立臺灣大學 校園美食地圖",
+  "campus_name": "台大校本部",
+  "center": [
+    25.0173,
+    121.5397
+  ],
+  "default_radius_km": 1.0,
+  "max_radius_km": 5.0,
+  "tiles": {
+    "url": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+    "subdomains": "abcd",
+    "max_zoom": 20,
+    "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> &copy; <a href=\"https://carto.com/attributions\">CARTO</a>"
+  },
+  "decay_km": 0.6,
+  "wheel_top_n": 40,
+  "food_group_sidebar": [
+    [
+      "台式小吃",
+      [
+        "滷味類",
+        "炸物類",
+        "便當類",
+        "點心包子類"
+      ]
+    ],
+    [
+      "正餐料理",
+      [
+        "火鍋類",
+        "牛排館類",
+        "麵食類",
+        "日式料理類",
+        "韓式類",
+        "熱炒合菜類",
+        "燒腊港式類",
+        "義式披薩類",
+        "百匯自助餐類"
+      ]
+    ],
+    [
+      "輕食飲品",
+      [
+        "下午茶咖啡廳類",
+        "素食蔬食類"
+      ]
+    ]
+  ],
+  "food_group_other": "其他",
+  "wheel_excluded_groups": [
+    "下午茶咖啡廳類",
+    "其他"
+  ],
+  "wheel_excluded_name_keywords": [
+    "自助冰",
+    "剉冰",
+    "刨冰",
+    "雪花冰",
+    "燒仙草",
+    "仙草冰",
+    "豆花",
+    "冰淇淋"
+  ],
+  "wheel_pinned_ids": [],
+  "counter_namespace": "food-map-ntu-v1",
+  "author_notice": "© 2026 Boson Huang · 核心演算法受著作權保護 · 禁止未授權複製或修改",
+  "repo_url": "https://github.com/boson316/food_map_ntu_v1"
+}
