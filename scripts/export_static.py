@@ -58,12 +58,13 @@ SCHOOL = {
     "lon": 121.5397,
     "radius": 1.0,
     "max_radius": 5.0,
-    "tiles": "carto",
+    "tiles": "nlsc",
     "counter_namespace": "food-map-ntu-v1",
     "repo_url": "https://github.com/boson316/food_map_ntu_v1",
 }
 
 TILES = {
+    # CARTO raster tiles now return an "API KEY REQUIRED" watermark without a key; kept only for reference.
     "carto": {
         "url": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
         "subdomains": "abcd",

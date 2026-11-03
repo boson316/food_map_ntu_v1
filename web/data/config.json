@@ -9,10 +9,10 @@
   "default_radius_km": 1.0,
   "max_radius_km": 5.0,
   "tiles": {
-    "url": "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-    "subdomains": "abcd",
-    "max_zoom": 20,
-    "attribution": "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> &copy; <a href=\"https://carto.com/attributions\">CARTO</a>"
+    "url": "https://wmts.nlsc.gov.tw/wmts/EMAP5/default/GoogleMapsCompatible/{z}/{y}/{x}",
+    "subdomains": "",
+    "max_zoom": 19,
+    "attribution": "&copy; <a href=\"https://maps.nlsc.gov.tw/\">內政部國土測繪中心</a>"
   },
   "decay_km": 0.6,
   "wheel_top_n": 40,
