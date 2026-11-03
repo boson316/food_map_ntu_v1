@@ -185,6 +185,25 @@ def export(args: argparse.Namespace) -> tuple[Path, Path, int]:
     )
     config = build_config(args, pinned_ids=load_pinned_ids(_ROOT / "data" / "user_favorites.json"))
     config_path.write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    # PWA manifest lives next to index.html (one level above data/).
+    manifest = {
+        "name": args.title,
+        "short_name": f"{args.school}美食",
+        "description": f"{args.campus_name}周邊美食地圖：評價 × 距離排序、分類篩選、轉盤抽午餐",
+        "lang": "zh-Hant-TW",
+        "start_url": "./",
+        "scope": "./",
+        "display": "standalone",
+        "background_color": "#fbf7f2",
+        "theme_color": "#e8590c",
+        "icons": [
+            {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+            {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+        ],
+    }
+    (out_dir.parent / "manifest.webmanifest").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     return places_path, config_path, len(places)
 
 

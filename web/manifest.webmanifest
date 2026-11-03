@@ -1,0 +1,25 @@
+{
+  "name": "國立臺灣大學 校園美食地圖",
+  "short_name": "台大美食",
+  "description": "台大校本部周邊美食地圖：評價 × 距離排序、分類篩選、轉盤抽午餐",
+  "lang": "zh-Hant-TW",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf7f2",
+  "theme_color": "#e8590c",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
